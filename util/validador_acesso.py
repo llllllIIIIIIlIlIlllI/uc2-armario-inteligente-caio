@@ -1,6 +1,7 @@
 from zoneinfo import ZoneInfo
 from datetime import datetime
 from datetime import time
+
 colaboradores = {
     "123": {
         "nome_completo": "Joazin",
@@ -9,9 +10,8 @@ colaboradores = {
         "admin": False,
         "nm_chaves_em_uso": 0,
         "bypass_horario": False,
-        "id_cracha": 123
+        "id_cracha": 123,
     },
-
     "124": {
         "nome_completo": "Porteiro da Silva",
         "tipo_cargo": "Porteiro",
@@ -19,8 +19,8 @@ colaboradores = {
         "admin": False,
         "nm_chaves_em_uso": 0,
         "bypass_horario": True,
-        "id_cracha": 124
-    }
+        "id_cracha": 124,
+    },
 }
 
 
@@ -32,7 +32,7 @@ hora_PROIBIDAFIM = time(5, 00, 00)
 
 
 def validar_acesso(id_cracha: int):
-    
+
     for dicionario in colaboradores:
         for dados_usuario in colaboradores.values():
             if dados_usuario["id_cracha"] == id_cracha:
@@ -56,8 +56,9 @@ def validar_acesso(id_cracha: int):
     else:
         print("Usuario sem bypass de horário")
 
-
-    if (hora_Atual >= hora_PROIBIDA or hora_Atual <= hora_PROIBIDAFIM) and docente_ativo:
+    if (
+        hora_Atual >= hora_PROIBIDA or hora_Atual <= hora_PROIBIDAFIM
+    ) and docente_ativo:
         print("Erro")
         print(hora_Atual)
     else:
