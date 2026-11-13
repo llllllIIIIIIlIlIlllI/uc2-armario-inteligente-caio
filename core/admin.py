@@ -6,5 +6,4 @@ from .models import *
 admin.site.register(Espaco)
 admin.site.register(Unidade)
 admin.site.register(Usuario)
-admin.site.register(UnidadeUsuario)
 admin.site.register(Chave)
