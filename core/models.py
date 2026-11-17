@@ -32,7 +32,7 @@ class Usuario(models.Model):
     unidades = models.ManyToManyField(Unidade)
 
     def __str__(self):
-        return self.nome
+        return self.nm_usuario
 
 
 class Espaco(models.Model):
@@ -53,3 +53,27 @@ class Chave(models.Model):
 
     def __str__(self):
         return self.cd_chave
+
+from django.db import models
+
+class ReservaFixa(models.Model):
+    class DiaDaSemana(models.IntegerChoices):
+        DOMINGO = 1, 'Domingo'
+        SEGUNDA = 2, 'Segunda-Feira'
+        TERCA = 3, 'Terça-Feira'
+        QUARTA = 4, 'Quarta-Feira'
+        QUINTA = 5, 'Quinta-Feira'
+        SEXTA = 6, 'Sexta-Feira'
+        SABADO = 7, 'Sábado'
+
+    id_reserva_fixa = models.AutoField(primary_key= True)
+    nr_dia_semana = models.IntegerField(choices=DiaDaSemana.choices)
+    hr_inicio = models.TimeField()
+    hr_fim = models.TimeField()
+    espaco = models.OneToOneField(Espaco, on_delete=models.PROTECT)
+    usuario = models.ForeignKey(Usuario, on_delete=models.PROTECT)
+    ds_turma = models.CharField(max_length= 55)
+    st_ativo = models.BooleanField(default = True)
+
+    def __str__(self):
+        return self.ds_turma
