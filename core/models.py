@@ -77,3 +77,96 @@ class ReservaFixa(models.Model):
 
     def __str__(self):
         return self.ds_turma
+
+class TipoReservaPontual(models.TextChoices):
+    DOCENTE_PONTUAL = 'DOCENTE_PONTUAL', 'Reserva Esporádica de Docente'
+    EVENTO_EXTERNO = 'EVENTO_EXTERNO', 'Evento Institucional / Externo'
+    MANUTENCAO = 'MANUTENCAO', 'Manutenção / Bloqueio Técnico'
+
+
+class TipoReservaPontual(models.TextChoices):
+    DOCENTE_PONTUAL = 'DOCENTE_PONTUAL', 'Reserva Esporádica de Docente'
+    EVENTO_EXTERNO = 'EVENTO_EXTERNO', 'Evento Institucional / Externo'
+    MANUTENCAO = 'MANUTENCAO', 'Manutenção / Bloqueio Técnico'
+
+
+class ReservaPontual(models.Model):
+    id_reserva_pontual = models.AutoField(primary_key=True)
+
+    espaco = models.ForeignKey(
+        Espaco,
+        on_delete=models.PROTECT,
+        verbose_name='Espaço'
+    )
+
+    usuario = models.ForeignKey(
+        Usuario,
+        on_delete=models.PROTECT,
+        verbose_name='Usuário responsável'
+    )
+
+    dt_reserva = models.DateField(verbose_name='Data da Reserva')
+    hr_inicio = models.TimeField(verbose_name='Horário de Início')
+    hr_fim = models.TimeField(verbose_name='Horário de Término')
+
+    tp_reserva = models.CharField(
+        max_length=30,
+        choices=TipoReservaPontual.choices,
+        verbose_name='Tipo de Reserva'
+    )
+
+    ds_motivo = models.TextField(verbose_name='Motivo da Reserva')
+
+    st_aprovado = models.BooleanField(
+        default=False,
+        verbose_name='Reserva Aprovada'
+    )
+
+    def __str__(self):
+        return f'{self.espaco} - {self.dt_reserva}'
+
+
+class Remanejamento(models.Model):
+    id_remanejamento = models.AutoField(primary_key=True)
+
+    espaco = models.ForeignKey(
+        Espaco,
+        on_delete=models.PROTECT,
+        verbose_name='Espaço'
+    )
+
+    usuario_substituto = models.ForeignKey(
+        Usuario,
+        on_delete=models.PROTECT,
+        verbose_name='Usuário Substituto'
+    )
+
+    dt_remanejamento = models.DateField(
+        verbose_name='Data Específica da Alteração'
+    )
+
+    hr_inicio = models.TimeField(verbose_name='Horário de Início')
+    hr_fim = models.TimeField(verbose_name='Horário de Término')
+
+    tp_reserva = models.CharField(
+        max_length=30,
+        choices=TipoReservaPontual.choices,
+        verbose_name='Tipo de Reserva'
+    )
+
+    ds_motivo = models.TextField(verbose_name='Motivo do Remanejamento')
+
+    dh_registro = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Data e Hora do Registro'
+    )
+
+    def __str__(self):
+        return f'{self.espaco} - {self.dt_remanejamento}'
+
+class PerfilAcesso(models.TextChoices):
+    MASTER_GERAL = 'MASTER_GERAL', 'Master Geral (Global)'
+    MASTER_UNIDADE = 'MASTER_UNIDADE', 'Master da Unidade'
+    COORDENADOR = 'COORDENADOR', 'Coordenador de Área'
+    DOCENTE = 'DOCENTE', 'Docente'
+    PORTARIA = 'PORTARIA', 'Operador de Portaria'
